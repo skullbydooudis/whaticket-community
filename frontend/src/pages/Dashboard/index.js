@@ -108,32 +108,53 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const [leadsRes, propertiesRes, visitsRes, proposalsRes, tasksRes] = await Promise.all([
-        api.get("/leads").catch(() => ({ data: { leads: [] } })),
-        api.get("/properties").catch(() => ({ data: { properties: [] } })),
-        api.get("/visits").catch(() => ({ data: { visits: [] } })),
-        api.get("/proposals").catch(() => ({ data: { proposals: [] } })),
+      const [analyticsRes, tasksRes, leadsRes] = await Promise.all([
+        api.get("/analytics/dashboard").catch(() => null),
         api.get("/tasks", { params: { status: "pending" } }).catch(() => ({ data: { tasks: [] } })),
+        api.get("/leads").catch(() => ({ data: { leads: [] } })),
       ]);
 
-      const leads = leadsRes.data.leads || [];
-      const properties = propertiesRes.data.properties || [];
-      const visits = visitsRes.data.visits || [];
-      const proposals = proposalsRes.data.proposals || [];
-      const allTasks = tasksRes.data.tasks || [];
+      if (analyticsRes && analyticsRes.data) {
+        const analytics = analyticsRes.data;
+        setStats({
+          totalLeads: analytics.leads.total,
+          newLeads: analytics.leads.new,
+          totalProperties: analytics.properties.total,
+          activeProperties: analytics.properties.available,
+          totalVisits: analytics.visits.total,
+          scheduledVisits: analytics.visits.scheduled,
+          totalProposals: analytics.proposals.total,
+          activeProposals: analytics.proposals.pending,
+        });
+      } else {
+        const [leadsRes2, propertiesRes, visitsRes, proposalsRes] = await Promise.all([
+          api.get("/leads").catch(() => ({ data: { leads: [] } })),
+          api.get("/properties").catch(() => ({ data: { properties: [] } })),
+          api.get("/visits").catch(() => ({ data: { visits: [] } })),
+          api.get("/proposals").catch(() => ({ data: { proposals: [] } })),
+        ]);
 
-      setStats({
-        totalLeads: leads.length,
-        newLeads: leads.filter((l) => l.status === "new").length,
-        totalProperties: properties.length,
-        activeProperties: properties.filter((p) => p.isActive).length,
-        totalVisits: visits.length,
-        scheduledVisits: visits.filter((v) => v.status === "scheduled").length,
-        totalProposals: proposals.length,
-        activeProposals: proposals.filter((p) =>
-          ["sent", "viewed", "negotiating"].includes(p.status)
-        ).length,
-      });
+        const leads = leadsRes2.data.leads || [];
+        const properties = propertiesRes.data.properties || [];
+        const visits = visitsRes.data.visits || [];
+        const proposals = proposalsRes.data.proposals || [];
+
+        setStats({
+          totalLeads: leads.length,
+          newLeads: leads.filter((l) => l.status === "new").length,
+          totalProperties: properties.length,
+          activeProperties: properties.filter((p) => p.isActive).length,
+          totalVisits: visits.length,
+          scheduledVisits: visits.filter((v) => v.status === "scheduled").length,
+          totalProposals: proposals.length,
+          activeProposals: proposals.filter((p) =>
+            ["sent", "viewed", "negotiating"].includes(p.status)
+          ).length,
+        });
+      }
+
+      const allTasks = tasksRes.data.tasks || [];
+      const leads = leadsRes.data.leads || [];
 
       setTasks(allTasks.slice(0, 10));
       setRecentLeads(leads.slice(0, 5));

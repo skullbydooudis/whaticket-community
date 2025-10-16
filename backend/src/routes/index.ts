@@ -17,6 +17,8 @@ import leadRoutes from "./leadRoutes";
 import proposalRoutes from "./proposalRoutes";
 import taskRoutes from "./taskRoutes";
 import pipelineRoutes from "./pipelineRoutes";
+import activityRoutes from "./activityRoutes";
+import analyticsRoutes from "./analyticsRoutes";
 
 const routes = Router();
 
@@ -37,5 +39,7 @@ routes.use(leadRoutes);
 routes.use(proposalRoutes);
 routes.use(taskRoutes);
 routes.use(pipelineRoutes);
+routes.use(activityRoutes);
+routes.use(analyticsRoutes);
 
 export default routes;

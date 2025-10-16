@@ -1,5 +1,6 @@
 import Lead from "../../models/Lead";
 import Activity from "../../models/Activity";
+import CalculateLeadScoreService from "./CalculateLeadScoreService";
 
 interface Request {
   name: string;
@@ -20,13 +21,24 @@ interface Request {
 }
 
 const CreateLeadService = async (data: Request): Promise<Lead> => {
+  const calculatedScore = CalculateLeadScoreService({
+    email: data.email,
+    phone: data.phone,
+    budgetMin: data.budgetMin,
+    budgetMax: data.budgetMax,
+    propertyType: data.propertyType,
+    preferredLocations: data.preferredLocations,
+    source: data.source,
+    daysAsLead: 0
+  });
+
   const lead = await Lead.create({
     name: data.name,
     email: data.email,
     phone: data.phone,
     source: data.source || "website",
     status: data.status || "new",
-    score: data.score || 0,
+    score: data.score !== undefined ? data.score : calculatedScore,
     budgetMin: data.budgetMin,
     budgetMax: data.budgetMax,
     propertyType: data.propertyType,

@@ -5,6 +5,7 @@ import ShowPropertyService from "../services/PropertyServices/ShowPropertyServic
 import UpdatePropertyService from "../services/PropertyServices/UpdatePropertyService";
 import DeletePropertyService from "../services/PropertyServices/DeletePropertyService";
 import GetPropertyByPublicUrlService from "../services/PropertyServices/GetPropertyByPublicUrlService";
+import GetPropertyAnalyticsService from "../services/PropertyServices/GetPropertyAnalyticsService";
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
   const { searchParam, pageNumber, status, type } = req.query as {
@@ -103,4 +104,14 @@ export const showByPublicUrl = async (req: Request, res: Response): Promise<Resp
   const property = await GetPropertyByPublicUrlService(publicUrl);
 
   return res.status(200).json(property);
+};
+
+export const analytics = async (req: Request, res: Response): Promise<Response> => {
+  const { propertyId } = req.params;
+
+  const analytics = await GetPropertyAnalyticsService({
+    propertyId: parseInt(propertyId)
+  });
+
+  return res.status(200).json(analytics);
 };
