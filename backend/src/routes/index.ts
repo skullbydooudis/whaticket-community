@@ -11,6 +11,8 @@ import whatsappSessionRoutes from "./whatsappSessionRoutes";
 import queueRoutes from "./queueRoutes";
 import quickAnswerRoutes from "./quickAnswerRoutes";
 import apiRoutes from "./apiRoutes";
+import propertyRoutes from "./propertyRoutes";
+import visitRoutes from "./visitRoutes";
 
 const routes = Router();
 
@@ -25,5 +27,7 @@ routes.use(whatsappSessionRoutes);
 routes.use(queueRoutes);
 routes.use(quickAnswerRoutes);
 routes.use("/api/messages", apiRoutes);
+routes.use(propertyRoutes);
+routes.use(visitRoutes);
 
 export default routes;

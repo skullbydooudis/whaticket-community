@@ -15,6 +15,8 @@ import PeopleAltOutlinedIcon from "@material-ui/icons/PeopleAltOutlined";
 import ContactPhoneOutlinedIcon from "@material-ui/icons/ContactPhoneOutlined";
 import AccountTreeOutlinedIcon from "@material-ui/icons/AccountTreeOutlined";
 import QuestionAnswerOutlinedIcon from "@material-ui/icons/QuestionAnswerOutlined";
+import HomeWorkIcon from "@material-ui/icons/HomeWork";
+import EventIcon from "@material-ui/icons/Event";
 
 import { i18n } from "../translate/i18n";
 import { WhatsAppsContext } from "../context/WhatsApp/WhatsAppsContext";
@@ -96,6 +98,16 @@ const MainListItems = (props) => {
         to="/contacts"
         primary={i18n.t("mainDrawer.listItems.contacts")}
         icon={<ContactPhoneOutlinedIcon />}
+      />
+      <ListItemLink
+        to="/properties"
+        primary="Imóveis"
+        icon={<HomeWorkIcon />}
+      />
+      <ListItemLink
+        to="/visits"
+        primary="Visitas"
+        icon={<EventIcon />}
       />
       <ListItemLink
         to="/quickAnswers"
