@@ -23,6 +23,7 @@ import leadUserRoutes from "./leadUserRoutes";
 import whatsappImportRoutes from "./whatsappImportRoutes";
 import storeRoutes from "./storeRoutes";
 import afterSalesRoutes from "./afterSalesRoutes";
+import circuitBreakerRoutes from "./circuitBreakerRoutes";
 
 const routes = Router();
 
@@ -49,5 +50,6 @@ routes.use(leadUserRoutes);
 routes.use(whatsappImportRoutes);
 routes.use(storeRoutes);
 routes.use(afterSalesRoutes);
+routes.use(circuitBreakerRoutes);
 
 export default routes;

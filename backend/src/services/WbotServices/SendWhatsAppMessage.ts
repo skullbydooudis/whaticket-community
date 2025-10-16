@@ -5,6 +5,7 @@ import GetWbotMessage from "../../helpers/GetWbotMessage";
 import SerializeWbotMsgId from "../../helpers/SerializeWbotMsgId";
 import Message from "../../models/Message";
 import Ticket from "../../models/Ticket";
+import { whatsappApiCircuitBreaker } from "../../config/circuitBreakers";
 
 import formatBody from "../../helpers/Mustache";
 
@@ -28,14 +29,16 @@ const SendWhatsAppMessage = async ({
   const wbot = await GetTicketWbot(ticket);
 
   try {
-    const sentMessage = await wbot.sendMessage(
-      `${ticket.contact.number}@${ticket.isGroup ? "g" : "c"}.us`,
-      formatBody(body, ticket.contact),
-      {
-        quotedMessageId: quotedMsgSerializedId,
-        linkPreview: false
-      }
-    );
+    const sentMessage = await whatsappApiCircuitBreaker.execute(async () => {
+      return await wbot.sendMessage(
+        `${ticket.contact.number}@${ticket.isGroup ? "g" : "c"}.us`,
+        formatBody(body, ticket.contact),
+        {
+          quotedMessageId: quotedMsgSerializedId,
+          linkPreview: false
+        }
+      );
+    });
 
     await ticket.update({ lastMessage: body });
     return sentMessage;

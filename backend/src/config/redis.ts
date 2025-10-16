@@ -1,5 +1,6 @@
 import Redis from "ioredis";
 import logger from "../utils/logger";
+import { redisCircuitBreaker } from "./circuitBreakers";
 
 interface RedisConfig {
   host: string;
@@ -76,7 +77,9 @@ class RedisClient {
 
   async get(key: string): Promise<string | null> {
     try {
-      return await this.client.get(key);
+      return await redisCircuitBreaker.execute(async () => {
+        return await this.client.get(key);
+      });
     } catch (error) {
       logger.error(`Redis GET error for key ${key}:`, error);
       return null;
@@ -89,12 +92,14 @@ class RedisClient {
     expirationInSeconds?: number
   ): Promise<boolean> {
     try {
-      if (expirationInSeconds) {
-        await this.client.setex(key, expirationInSeconds, value);
-      } else {
-        await this.client.set(key, value);
-      }
-      return true;
+      return await redisCircuitBreaker.execute(async () => {
+        if (expirationInSeconds) {
+          await this.client.setex(key, expirationInSeconds, value);
+        } else {
+          await this.client.set(key, value);
+        }
+        return true;
+      });
     } catch (error) {
       logger.error(`Redis SET error for key ${key}:`, error);
       return false;
@@ -128,8 +133,10 @@ class RedisClient {
 
   async del(key: string): Promise<boolean> {
     try {
-      await this.client.del(key);
-      return true;
+      return await redisCircuitBreaker.execute(async () => {
+        await this.client.del(key);
+        return true;
+      });
     } catch (error) {
       logger.error(`Redis DEL error for key ${key}:`, error);
       return false;
@@ -339,8 +346,10 @@ class RedisClient {
 
   async ping(): Promise<boolean> {
     try {
-      const result = await this.client.ping();
-      return result === "PONG";
+      return await redisCircuitBreaker.execute(async () => {
+        const result = await this.client.ping();
+        return result === "PONG";
+      });
     } catch (error) {
       logger.error("Redis PING error:", error);
       return false;

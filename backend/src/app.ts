@@ -16,6 +16,8 @@ import { handleErrors, notFoundHandler } from "./middleware/errorHandler";
 import { globalRateLimiter } from "./middleware/rateLimiter";
 import { sanitizeMiddleware } from "./middleware/validation";
 import metricsCollector from "./middleware/metricsCollector";
+import { correlationIdMiddleware } from "./middleware/correlationId";
+import { requestLoggerMiddleware } from "./middleware/requestLogger";
 import HealthController from "./controllers/HealthController";
 
 if (process.env.SENTRY_DSN) {
@@ -80,6 +82,10 @@ if (process.env.SENTRY_DSN) {
   app.use(Sentry.Handlers.requestHandler());
   app.use(Sentry.Handlers.tracingHandler());
 }
+
+app.use(correlationIdMiddleware);
+
+app.use(requestLoggerMiddleware);
 
 app.use(metricsCollector.middleware());
 
