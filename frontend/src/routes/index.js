@@ -16,6 +16,8 @@ import Queues from "../pages/Queues/";
 import Properties from "../pages/Properties/";
 import Visits from "../pages/Visits/";
 import PropertyPublic from "../pages/PropertyPublic/";
+import Leads from "../pages/Leads/";
+import Pipeline from "../pages/Pipeline/";
 import { AuthProvider } from "../context/Auth/AuthContext";
 import { WhatsAppsProvider } from "../context/WhatsApp/WhatsAppsContext";
 import { ThemeProvider } from "../context/DarkMode";
@@ -42,6 +44,8 @@ const Routes = () => {
                 <Route exact path="/Queues" component={Queues} isPrivate />
                 <Route exact path="/properties" component={Properties} isPrivate />
                 <Route exact path="/visits" component={Visits} isPrivate />
+                <Route exact path="/leads" component={Leads} isPrivate />
+                <Route exact path="/pipeline" component={Pipeline} isPrivate />
               </LoggedInLayout>
             </WhatsAppsProvider>
           </Switch>

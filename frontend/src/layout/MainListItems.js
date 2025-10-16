@@ -17,6 +17,8 @@ import AccountTreeOutlinedIcon from "@material-ui/icons/AccountTreeOutlined";
 import QuestionAnswerOutlinedIcon from "@material-ui/icons/QuestionAnswerOutlined";
 import HomeWorkIcon from "@material-ui/icons/HomeWork";
 import EventIcon from "@material-ui/icons/Event";
+import TrendingUpIcon from "@material-ui/icons/TrendingUp";
+import AssessmentIcon from "@material-ui/icons/Assessment";
 
 import { i18n } from "../translate/i18n";
 import { WhatsAppsContext } from "../context/WhatsApp/WhatsAppsContext";
@@ -98,6 +100,16 @@ const MainListItems = (props) => {
         to="/contacts"
         primary={i18n.t("mainDrawer.listItems.contacts")}
         icon={<ContactPhoneOutlinedIcon />}
+      />
+      <ListItemLink
+        to="/leads"
+        primary="Leads"
+        icon={<TrendingUpIcon />}
+      />
+      <ListItemLink
+        to="/pipeline"
+        primary="Pipeline"
+        icon={<AssessmentIcon />}
       />
       <ListItemLink
         to="/properties"

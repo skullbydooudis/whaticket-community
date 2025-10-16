@@ -13,6 +13,10 @@ import quickAnswerRoutes from "./quickAnswerRoutes";
 import apiRoutes from "./apiRoutes";
 import propertyRoutes from "./propertyRoutes";
 import visitRoutes from "./visitRoutes";
+import leadRoutes from "./leadRoutes";
+import proposalRoutes from "./proposalRoutes";
+import taskRoutes from "./taskRoutes";
+import pipelineRoutes from "./pipelineRoutes";
 
 const routes = Router();
 
@@ -29,5 +33,9 @@ routes.use(quickAnswerRoutes);
 routes.use("/api/messages", apiRoutes);
 routes.use(propertyRoutes);
 routes.use(visitRoutes);
+routes.use(leadRoutes);
+routes.use(proposalRoutes);
+routes.use(taskRoutes);
+routes.use(pipelineRoutes);
 
 export default routes;
