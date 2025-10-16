@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import Proposal from "../models/Proposal";
 import Activity from "../models/Activity";
+import GenerateProposalService from "../services/ProposalServices/GenerateProposalService";
+import SendProposalService from "../services/ProposalServices/SendProposalService";
+import UpdateProposalStatusService from "../services/ProposalServices/UpdateProposalStatusService";
 import { v4 as uuidv4 } from "uuid";
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
@@ -114,4 +117,58 @@ export const remove = async (req: Request, res: Response): Promise<Response> => 
   await proposal.destroy();
 
   return res.status(200).json({ message: "Proposal deleted" });
+};
+
+export const generate = async (req: Request, res: Response): Promise<Response> => {
+  const {
+    leadId,
+    propertyId,
+    proposedValue,
+    downPayment,
+    installments,
+    installmentValue,
+    notes,
+    template
+  } = req.body;
+
+  const proposal = await GenerateProposalService({
+    leadId,
+    propertyId,
+    proposedValue,
+    downPayment,
+    installments,
+    installmentValue,
+    notes,
+    template,
+    userId: parseInt(req.user.id)
+  });
+
+  return res.status(201).json(proposal);
+};
+
+export const send = async (req: Request, res: Response): Promise<Response> => {
+  const { proposalId } = req.params;
+  const { sendNotification = true } = req.body;
+
+  const proposal = await SendProposalService({
+    proposalId: parseInt(proposalId),
+    userId: parseInt(req.user.id),
+    sendNotification
+  });
+
+  return res.status(200).json(proposal);
+};
+
+export const changeStatus = async (req: Request, res: Response): Promise<Response> => {
+  const { proposalId } = req.params;
+  const { status, rejectionReason } = req.body;
+
+  const proposal = await UpdateProposalStatusService({
+    proposalId: parseInt(proposalId),
+    status,
+    userId: parseInt(req.user.id),
+    rejectionReason
+  });
+
+  return res.status(200).json(proposal);
 };

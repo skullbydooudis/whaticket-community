@@ -3,6 +3,8 @@ import CreateVisitService from "../services/VisitServices/CreateVisitService";
 import ListVisitsService from "../services/VisitServices/ListVisitsService";
 import UpdateVisitService from "../services/VisitServices/UpdateVisitService";
 import DeleteVisitService from "../services/VisitServices/DeleteVisitService";
+import ScheduleVisitService from "../services/VisitServices/ScheduleVisitService";
+import CheckAvailabilityService from "../services/VisitServices/CheckAvailabilityService";
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
   const { searchParam, pageNumber, status, propertyId, startDate, endDate } = req.query as {
@@ -62,4 +64,42 @@ export const remove = async (req: Request, res: Response): Promise<Response> => 
   await DeleteVisitService(visitId);
 
   return res.status(200).json({ message: "Visit deleted" });
+};
+
+export const schedule = async (req: Request, res: Response): Promise<Response> => {
+  const { propertyId, contactId, leadId, scheduledDate, notes } = req.body;
+
+  const result = await ScheduleVisitService({
+    propertyId,
+    contactId,
+    leadId,
+    scheduledDate: new Date(scheduledDate),
+    notes,
+    userId: parseInt(req.user.id)
+  });
+
+  if (result.conflicts.length > 0) {
+    return res.status(409).json({
+      message: "Horário indisponível",
+      conflicts: result.conflicts,
+      suggestions: result.suggestions
+    });
+  }
+
+  return res.status(201).json(result.visit);
+};
+
+export const checkAvailability = async (req: Request, res: Response): Promise<Response> => {
+  const { propertyId, date } = req.query;
+
+  if (!propertyId || !date) {
+    return res.status(400).json({ error: "propertyId and date are required" });
+  }
+
+  const availability = await CheckAvailabilityService({
+    propertyId: parseInt(propertyId as string),
+    date: new Date(date as string)
+  });
+
+  return res.status(200).json({ availability });
 };

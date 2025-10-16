@@ -6,6 +6,7 @@ import UpdatePropertyService from "../services/PropertyServices/UpdatePropertySe
 import DeletePropertyService from "../services/PropertyServices/DeletePropertyService";
 import GetPropertyByPublicUrlService from "../services/PropertyServices/GetPropertyByPublicUrlService";
 import GetPropertyAnalyticsService from "../services/PropertyServices/GetPropertyAnalyticsService";
+import AdvancedSearchService from "../services/PropertyServices/AdvancedSearchService";
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
   const { searchParam, pageNumber, status, type } = req.query as {
@@ -114,4 +115,28 @@ export const analytics = async (req: Request, res: Response): Promise<Response> 
   });
 
   return res.status(200).json(analytics);
+};
+
+export const advancedSearch = async (req: Request, res: Response): Promise<Response> => {
+  const filters = {
+    query: req.query.query as string,
+    type: req.query.type ? (req.query.type as string).split(",") : undefined,
+    status: req.query.status ? (req.query.status as string).split(",") : undefined,
+    city: req.query.city ? (req.query.city as string).split(",") : undefined,
+    priceMin: req.query.priceMin ? parseFloat(req.query.priceMin as string) : undefined,
+    priceMax: req.query.priceMax ? parseFloat(req.query.priceMax as string) : undefined,
+    areaMin: req.query.areaMin ? parseFloat(req.query.areaMin as string) : undefined,
+    areaMax: req.query.areaMax ? parseFloat(req.query.areaMax as string) : undefined,
+    bedrooms: req.query.bedrooms ? (req.query.bedrooms as string).split(",").map(Number) : undefined,
+    bathrooms: req.query.bathrooms ? (req.query.bathrooms as string).split(",").map(Number) : undefined,
+    parkingSpaces: req.query.parkingSpaces ? (req.query.parkingSpaces as string).split(",").map(Number) : undefined,
+    sortBy: req.query.sortBy as string,
+    sortOrder: (req.query.sortOrder as "ASC" | "DESC") || "ASC",
+    limit: req.query.limit ? parseInt(req.query.limit as string) : 20,
+    offset: req.query.offset ? parseInt(req.query.offset as string) : 0
+  };
+
+  const result = await AdvancedSearchService(filters);
+
+  return res.status(200).json(result);
 };

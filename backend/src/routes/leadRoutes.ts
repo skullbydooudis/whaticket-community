@@ -10,5 +10,7 @@ leadRoutes.get("/leads/:leadId", isAuth, LeadController.show);
 leadRoutes.put("/leads/:leadId", isAuth, LeadController.update);
 leadRoutes.delete("/leads/:leadId", isAuth, LeadController.remove);
 leadRoutes.put("/leads/:leadId/stage", isAuth, LeadController.updateStage);
+leadRoutes.post("/leads/:leadId/qualify", isAuth, LeadController.qualify);
+leadRoutes.get("/leads/:leadId/match-properties", isAuth, LeadController.matchProperties);
 
 export default leadRoutes;

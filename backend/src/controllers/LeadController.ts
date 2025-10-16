@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import CreateLeadService from "../services/LeadServices/CreateLeadService";
 import ListLeadsService from "../services/LeadServices/ListLeadsService";
+import QualifyLeadService from "../services/LeadServices/QualifyLeadService";
+import MatchPropertiesService from "../services/PropertyServices/MatchPropertiesService";
 import Lead from "../models/Lead";
 import Activity from "../models/Activity";
 
@@ -105,4 +107,27 @@ export const updateStage = async (req: Request, res: Response): Promise<Response
   });
 
   return res.status(200).json(lead);
+};
+
+export const qualify = async (req: Request, res: Response): Promise<Response> => {
+  const { leadId } = req.params;
+
+  const result = await QualifyLeadService({
+    leadId: parseInt(leadId),
+    userId: parseInt(req.user.id)
+  });
+
+  return res.status(200).json(result);
+};
+
+export const matchProperties = async (req: Request, res: Response): Promise<Response> => {
+  const { leadId } = req.params;
+  const { limit } = req.query;
+
+  const properties = await MatchPropertiesService({
+    leadId: parseInt(leadId),
+    limit: limit ? parseInt(limit as string) : undefined
+  });
+
+  return res.status(200).json({ properties });
 };

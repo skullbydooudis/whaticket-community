@@ -6,6 +6,8 @@ const visitRoutes = Router();
 
 visitRoutes.get("/visits", isAuth, VisitController.index);
 visitRoutes.post("/visits", isAuth, VisitController.store);
+visitRoutes.post("/visits/schedule", isAuth, VisitController.schedule);
+visitRoutes.get("/visits/availability", isAuth, VisitController.checkAvailability);
 visitRoutes.put("/visits/:visitId", isAuth, VisitController.update);
 visitRoutes.delete("/visits/:visitId", isAuth, VisitController.remove);
 

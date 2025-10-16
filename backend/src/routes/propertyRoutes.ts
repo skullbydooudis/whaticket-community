@@ -5,6 +5,7 @@ import * as PropertyController from "../controllers/PropertyController";
 const propertyRoutes = Router();
 
 propertyRoutes.get("/properties", isAuth, PropertyController.index);
+propertyRoutes.get("/properties/search", isAuth, PropertyController.advancedSearch);
 propertyRoutes.post("/properties", isAuth, PropertyController.store);
 propertyRoutes.get("/properties/:propertyId", isAuth, PropertyController.show);
 propertyRoutes.get("/properties/:propertyId/analytics", isAuth, PropertyController.analytics);
