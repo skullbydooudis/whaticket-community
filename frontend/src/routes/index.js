@@ -18,6 +18,8 @@ import Visits from "../pages/Visits/";
 import PropertyPublic from "../pages/PropertyPublic/";
 import Leads from "../pages/Leads/";
 import Pipeline from "../pages/Pipeline/";
+import Proposals from "../pages/Proposals/";
+import Tasks from "../pages/Tasks/";
 import { AuthProvider } from "../context/Auth/AuthContext";
 import { WhatsAppsProvider } from "../context/WhatsApp/WhatsAppsContext";
 import { ThemeProvider } from "../context/DarkMode";
@@ -46,6 +48,8 @@ const Routes = () => {
                 <Route exact path="/visits" component={Visits} isPrivate />
                 <Route exact path="/leads" component={Leads} isPrivate />
                 <Route exact path="/pipeline" component={Pipeline} isPrivate />
+                <Route exact path="/proposals" component={Proposals} isPrivate />
+                <Route exact path="/tasks" component={Tasks} isPrivate />
               </LoggedInLayout>
             </WhatsAppsProvider>
           </Switch>

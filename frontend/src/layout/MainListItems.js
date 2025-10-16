@@ -19,6 +19,8 @@ import HomeWorkIcon from "@material-ui/icons/HomeWork";
 import EventIcon from "@material-ui/icons/Event";
 import TrendingUpIcon from "@material-ui/icons/TrendingUp";
 import AssessmentIcon from "@material-ui/icons/Assessment";
+import DescriptionIcon from "@material-ui/icons/Description";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 
 import { i18n } from "../translate/i18n";
 import { WhatsAppsContext } from "../context/WhatsApp/WhatsAppsContext";
@@ -120,6 +122,16 @@ const MainListItems = (props) => {
         to="/visits"
         primary="Visitas"
         icon={<EventIcon />}
+      />
+      <ListItemLink
+        to="/proposals"
+        primary="Propostas"
+        icon={<DescriptionIcon />}
+      />
+      <ListItemLink
+        to="/tasks"
+        primary="Tarefas"
+        icon={<AssignmentIcon />}
       />
       <ListItemLink
         to="/quickAnswers"
