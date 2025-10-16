@@ -21,6 +21,8 @@ import activityRoutes from "./activityRoutes";
 import analyticsRoutes from "./analyticsRoutes";
 import leadUserRoutes from "./leadUserRoutes";
 import whatsappImportRoutes from "./whatsappImportRoutes";
+import storeRoutes from "./storeRoutes";
+import afterSalesRoutes from "./afterSalesRoutes";
 
 const routes = Router();
 
@@ -45,5 +47,7 @@ routes.use(activityRoutes);
 routes.use(analyticsRoutes);
 routes.use(leadUserRoutes);
 routes.use(whatsappImportRoutes);
+routes.use(storeRoutes);
+routes.use(afterSalesRoutes);
 
 export default routes;
